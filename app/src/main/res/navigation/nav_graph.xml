@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/movieListFragment">
+
+    <fragment
+        android:id="@+id/movieListFragment"
+        android:name="com.meza.movielibrary.ui.list.MovieListFragment"
+        android:label="Mis Películas">
+        <action android:id="@+id/action_list_to_detail"
+            app:destination="@id/movieDetailFragment"/>
+        <action android:id="@+id/action_list_to_edit"
+            app:destination="@id/movieEditFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/movieDetailFragment"
+        android:name="com.meza.movielibrary.ui.detail.MovieDetailFragment"
+        android:label="Detalle">
+        <argument android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+        <action android:id="@+id/action_detail_to_edit"
+            app:destination="@id/movieEditFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/movieEditFragment"
+        android:name="com.meza.movielibrary.ui.edit.MovieEditFragment"
+        android:label="Crear / Editar">
+        <argument android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+    </fragment>
+</navigation>
