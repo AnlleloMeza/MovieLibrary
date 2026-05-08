@@ -29,11 +29,15 @@ class MovieDetailFragment : Fragment() {
             binding.tvYear.text   = "Año: ${movie.year}"
             binding.tvGenre.text  = "Género: ${movie.genre}"
             binding.tvRating.text = "Rating: ${movie.rating}"
-            binding.cbWatched.isChecked = movie.watched
 
+            binding.cbWatched.setOnCheckedChangeListener(null)
+            binding.cbWatched.isChecked = movie.watched
             binding.cbWatched.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.update(movie.copy(watched = isChecked))
+                if (isChecked != movie.watched) {
+                    viewModel.update(movie.copy(watched = isChecked))
+                }
             }
+
             binding.btnEdit.setOnClickListener {
                 val bundle = Bundle().apply { putInt("movieId", movie.id) }
                 findNavController().navigate(R.id.action_detail_to_edit, bundle)

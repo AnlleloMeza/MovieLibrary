@@ -15,6 +15,8 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedMovie = MutableLiveData<Movie?>()
     val selectedMovie: LiveData<Movie?> = _selectedMovie
 
+    private var currentMovieLiveData: LiveData<Movie?>? = null
+
     init {
         val dao = AppDatabase.getDatabase(application).movieDao()
         repository = MovieRepository(dao)
@@ -22,7 +24,18 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun loadMovie(id: Int) {
-        repository.getMovie(id).observeForever { _selectedMovie.value = it }
+        currentMovieLiveData?.removeObserver(movieObserver)
+        currentMovieLiveData = repository.getMovie(id)
+        currentMovieLiveData?.observeForever(movieObserver)
+    }
+
+    private val movieObserver = Observer<Movie?> { movie ->
+        _selectedMovie.value = movie
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        currentMovieLiveData?.removeObserver(movieObserver)
     }
 
     fun insert(movie: Movie) = viewModelScope.launch { repository.insert(movie) }
